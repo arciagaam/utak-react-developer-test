@@ -2,8 +2,7 @@ import { Button } from '@/components/ui/button';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { menuItemSchema } from '@/validators/menuItem';
-import { TrashIcon } from 'lucide-react';
-import React from 'react'
+import { PlusIcon, TrashIcon } from 'lucide-react';
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
 import OptionItem from './OptionItem';
@@ -59,7 +58,7 @@ const OptionGroup = ({ id, nestIndex, form, handleRemove, formDisabled }: { id: 
             </div>
             
             {
-                !formDisabled && <Button type="button" className="mt-10" variant={'outline'} onClick={handleAppendOptionItem}>Add Item +</Button>
+                !formDisabled && <Button type="button" className="mt-10 flex gap-2" variant={'outline'} onClick={handleAppendOptionItem}><PlusIcon size={16}/> Add Item</Button>
             }
 
         </div>

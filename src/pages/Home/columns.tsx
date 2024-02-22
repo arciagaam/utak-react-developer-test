@@ -3,6 +3,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigg
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react";
 import { ShowMenuModal } from "./components/modals/ShowMenuModal";
+import { AlertModal } from "@/components/global/AlertModal";
+import { deleteMenuItem } from "@/api/menuItemAPI";
 
 export type TOptionItem = {
     name: string,
@@ -42,7 +44,7 @@ export const columns: ColumnDef<TMenu>[] = [
         header: 'Option/s',
         cell: ({ row }) => {
             const options = row.getValue("options") as TOption[];
-            if(!options) return 'N/A'
+            if (!options) return 'N/A'
 
             const optionsStringArray = options.map((option) => option.name);
             const optionsString = optionsStringArray.join(', ');
@@ -68,21 +70,27 @@ export const columns: ColumnDef<TMenu>[] = [
 
             return (
                 <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Open menu</span>
-                        <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <span className="sr-only">Open menu</span>
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-                    <ShowMenuModal id={id} />
-                    {/*
+                        <ShowMenuModal id={id} />
+                        <AlertModal
+                            trigger={<button>Delete</button>}
+                            title="Are you sure?"
+                            description="This action cannot be undone. This will permanently delete the item."
+                            action={() => deleteMenuItem(id)}
+                        />
+                        {/*
                         <DropdownMenuItem className="focus:bg-red-100 focus:text-red-500 text-red-500 bg-red-50">Delete User</DropdownMenuItem>
                     */}
-                </DropdownMenuContent>
-            </DropdownMenu>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             )
         },
     }

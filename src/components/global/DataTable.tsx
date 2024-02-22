@@ -64,7 +64,7 @@ function DataTable<TData, TValue>({
     return (
         <div className="flex flex-col gap-3">
 
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-2">
                 <div className="flex gap-5 items-center">
                     <div className="flex items-center">
                         <Input

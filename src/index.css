@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -68,9 +69,9 @@
  
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border font-red-hat-display;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-[#fafafa] text-foreground;
   }
 }

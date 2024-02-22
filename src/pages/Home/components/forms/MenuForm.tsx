@@ -4,9 +4,10 @@ import { menuItemSchema } from "@/validators/menuItem"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { OptionGroupFields } from "../OptionGroupFields"
 import { useForm } from "react-hook-form"
-import { createMenuItem, getMenuItem } from "@/api/menuItemAPI"
+import { createMenuItem, getMenuItem, updateMenuItem } from "@/api/menuItemAPI"
 import { TZodMenuItem } from "@/types/zod"
-import { SetStateAction, useEffect } from "react"
+import React, { SetStateAction, useEffect } from "react"
+import toast from "react-hot-toast"
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MenuForm = (
@@ -18,13 +19,9 @@ const MenuForm = (
     }: {
         formDisabled?: boolean,
         isEditing?: boolean,
-        setIsEditing: React.Dispatch<SetStateAction<boolean>>,
+        setIsEditing?: React.Dispatch<SetStateAction<boolean>>,
         id?: string | null
     }) => {
-
-    const onFormSubmit = (values: TZodMenuItem) => {
-        createMenuItem({ data: values })
-    }
 
     const addMenuItemForm = useForm<TZodMenuItem>({
         resolver: zodResolver(menuItemSchema),
@@ -36,7 +33,19 @@ const MenuForm = (
             cost: '',
             amountInStock: 0,
         }
-    })
+    });
+
+    const onFormSubmit = async (values: TZodMenuItem) => {
+        if(isEditing && id && setIsEditing) {
+            await updateMenuItem({data: values, id: id});
+            toast.success('Menu successfully updated');
+            setIsEditing(false);
+        }else{
+            await createMenuItem({ data: values });
+            toast.success('Menu successfully created');
+            addMenuItemForm.reset()
+        }
+    }
 
     useEffect(() => {
         const getData = async () => {
@@ -48,13 +57,12 @@ const MenuForm = (
                 addMenuItemForm.reset(res.data);
             }
         }
-
         getData();
-    }, [])
+    }, [addMenuItemForm, id, isEditing])
 
     return (
         <Form {...addMenuItemForm}>
-            <form id="add-menu-item-form" onSubmit={addMenuItemForm.handleSubmit(onFormSubmit)} className="grid grid-cols-2 gap-5 max-h-[70vh] overflow-auto h-full p-1">
+            <form id="add-menu-item-form" onSubmit={addMenuItemForm.handleSubmit(onFormSubmit)} className="grid grid-cols-1 lg:grid-cols-2 gap-5 max-h-[70vh] overflow-auto h-full">
                 <div className="flex flex-col gap-5 bg-white p-5 rounded-md border border-black/10 h-fit">
                     <FormField
                         control={addMenuItemForm.control}

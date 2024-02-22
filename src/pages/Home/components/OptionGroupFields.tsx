@@ -1,9 +1,9 @@
-import React from 'react'
 import { OptionGroup } from './OptionGroup'
 import { Button } from '@/components/ui/button'
 import { UseFormReturn, useFieldArray } from 'react-hook-form';
 import { menuItemSchema } from '@/validators/menuItem';
 import { z } from 'zod';
+import { PlusIcon } from 'lucide-react';
 
 const OptionGroupFields = ({form, formDisabled }: {form: UseFormReturn<z.infer<typeof menuItemSchema>>, formDisabled?: boolean}) => {
     const { fields, append, remove } = useFieldArray({
@@ -29,7 +29,7 @@ const OptionGroupFields = ({form, formDisabled }: {form: UseFormReturn<z.infer<t
             }
 
             {
-                !formDisabled && <Button type="button" variant={'outline'} onClick={handleAddOption}>Add Option +</Button>
+                !formDisabled && <Button type="button" variant={'outline'} onClick={handleAddOption} className='flex gap-2'><PlusIcon size={18}/> Add Option</Button>
             }
             
         </div>

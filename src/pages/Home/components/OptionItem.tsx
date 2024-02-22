@@ -40,7 +40,7 @@ const OptionItem = ({ id, index, nestIndex, form, handleRemoveOptionItem, formDi
             />
 
             {
-                !formDisabled && <Button type="button" onClick={handleRemoveOptionItem} variant={'outline'} className="flex gap-1"><TrashIcon size={18} /></Button>
+                !formDisabled && <Button type="button" onClick={handleRemoveOptionItem} variant={'outline'} className="flex gap-1 ring-red-500 border-red-400"><TrashIcon color='#EF4444' size={18} /></Button>
             }
 
         </div>

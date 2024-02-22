@@ -1,4 +1,4 @@
-import { child, get, ref, set } from "firebase/database"
+import { child, get, ref, set, update, remove } from "firebase/database"
 import { db } from '../database/firebase'
 import { TMenu } from "@/pages/Home/columns";
 import { uid } from 'uid';
@@ -70,6 +70,44 @@ export const getMenuItem = async (id: string): Promise<TResponse<TZodMenuItem> |
             data: undefined,
             status: 400,
             message: 'No data available'
+        }
+        
+    } catch (error) {
+        return {
+            data: undefined,
+            status: 400,
+            message: error instanceof Error ? error.message : 'Something went wrong'
+        }
+    }
+}
+
+export const updateMenuItem = async ({data, id}: {data:TZodMenuItem, id: string}): Promise<TResponse<TZodMenuItem> | undefined> => {
+    try {
+        await update(ref(db), {['/menu/' + id]: data});
+
+        return {
+            data: data,
+            status: 400,
+            message: 'No data available'
+        }
+
+    } catch (error) {
+        return {
+            data: undefined,
+            status: 400,
+            message: error instanceof Error ? error.message : 'Something went wrong'
+        }
+    }
+}
+
+export const deleteMenuItem = async (id: string): Promise<TResponse<undefined>> => {
+    try {
+        await remove(ref(db, `/menu/${id}`));
+
+        return {
+            data: undefined,
+            status: 400,
+            message: 'Item successfully deleted'
         }
         
     } catch (error) {
