@@ -5,10 +5,12 @@ import { MoreHorizontal } from "lucide-react";
 import { ShowMenuModal } from "./components/modals/ShowMenuModal";
 import { AlertModal } from "@/components/global/AlertModal";
 import { deleteMenuItem } from "@/api/menuItemAPI";
+import { Badge } from "@/components/ui/badge";
+import toast from "react-hot-toast";
 
 export type TOptionItem = {
     name: string,
-    additionalPrice: string,
+    additionalPrice: number,
 }
 
 export type TOption = {
@@ -19,10 +21,10 @@ export type TOption = {
 export type TMenu = {
     id: string;
     name: string;
-    basePrice: string;
+    basePrice: number;
     category: string;
     options: TOption[];
-    cost: string;
+    cost: number;
     amountInStock: number;
 }
 
@@ -49,6 +51,9 @@ export const columns: ColumnDef<TMenu>[] = [
             const optionsStringArray = options.map((option) => option.name);
             const optionsString = optionsStringArray.join(', ');
 
+            if (optionsStringArray.length > 2) {
+                return <p title={optionsString}>{optionsStringArray[0]}, {optionsStringArray[1]} <Badge className="ml-1" variant="outline">11 more</Badge></p>
+            }
 
             return optionsString || 'N/A'
         },
@@ -66,7 +71,7 @@ export const columns: ColumnDef<TMenu>[] = [
         enableHiding: false,
         header: "Actions",
         cell: ({ row }) => {
-            const { id } = row.original
+            const { id, name } = row.original
 
             return (
                 <DropdownMenu>
@@ -77,15 +82,21 @@ export const columns: ColumnDef<TMenu>[] = [
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuLabel>Actions - {name}</DropdownMenuLabel>
 
-                        <ShowMenuModal id={id} />
-                        <AlertModal
-                            trigger={<button>Delete</button>}
-                            title="Are you sure?"
-                            description="This action cannot be undone. This will permanently delete the item."
-                            action={() => deleteMenuItem(id)}
-                        />
+                        <div className="flex flex-col items-start gap-1">
+                            <ShowMenuModal id={id} />
+                            <ShowMenuModal id={id} label={'Edit Item'} editMenu={true} />
+                            <AlertModal
+                                trigger={<Button className="text-left justify-start items-start hover:bg-red-500 hover:text-secondary w-full h-fit p-2" variant={'ghost'}>Delete Item</Button>}
+                                title="Are you sure?"
+                                description="This action cannot be undone. This will permanently delete the item."
+                                action={() => {
+                                    deleteMenuItem(id);
+                                    toast.success('Item successfully deleted');
+                                }}
+                            />
+                        </div>
                         {/*
                         <DropdownMenuItem className="focus:bg-red-100 focus:text-red-500 text-red-500 bg-red-50">Delete User</DropdownMenuItem>
                     */}

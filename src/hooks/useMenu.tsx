@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 export const useMenu = () => {
 
     const [data, setData] = useState<TMenu[]>([]);
+    const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
         const getData = async () => {
@@ -24,6 +25,8 @@ export const useMenu = () => {
             if (res && res.data) {
                 setData(res.data);
             }
+
+            setLoading(false)
         }
 
         getData();
@@ -38,6 +41,6 @@ export const useMenu = () => {
         })
     }, [])
 
-    return { data };
+    return { data, loading };
 
 }   

@@ -22,7 +22,6 @@ const OptionGroupFields = ({form, formDisabled }: {form: UseFormReturn<z.infer<t
     return (
         <div className="flex flex-col gap-5">
             {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 fields.map(({id} : {id: number | string}, index) => (
                     <OptionGroup key={index} id={id} nestIndex={index} form={form} formDisabled={formDisabled} handleRemove={() => handleRemoveOption(index)} />
                 ))

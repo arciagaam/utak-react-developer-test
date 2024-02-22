@@ -31,19 +31,26 @@ const OptionGroup = ({ id, nestIndex, form, handleRemove, formDisabled }: { id: 
                     control={form.control}
                     name={`options.${nestIndex}.name`}
                     render={({ field }) => (
-                        <FormItem className="w-full">
+                        <FormItem className="w-full flex flex-col">
+
                             <FormLabel>Option Name</FormLabel>
-                            <FormControl>
-                                <Input disabled={formDisabled} placeholder="Enter option name" {...field} />
-                            </FormControl>
-                            <FormMessage />
+
+                            <div className="flex gap-2">
+                                <FormControl>
+                                    <Input disabled={formDisabled} placeholder="Enter option name" {...field} />
+                                </FormControl>
+
+                                {
+                                    !formDisabled && <Button type="button" onClick={handleRemove} variant={'destructive'} className="flex gap-1"><TrashIcon size={18} /> Remove Option</Button>
+                                }
+                            </div>
+
+                            <FormMessage className='mt-0'/>
                         </FormItem>
                     )}
                 />
 
-                {
-                    !formDisabled && <Button type="button" onClick={handleRemove} variant={'destructive'} className="flex gap-1"><TrashIcon size={18} /> Remove Option</Button>
-                }
+
 
 
             </div>
@@ -56,9 +63,9 @@ const OptionGroup = ({ id, nestIndex, form, handleRemove, formDisabled }: { id: 
                     ))
                 }
             </div>
-            
+
             {
-                !formDisabled && <Button type="button" className="mt-10 flex gap-2" variant={'outline'} onClick={handleAppendOptionItem}><PlusIcon size={16}/> Add Item</Button>
+                !formDisabled && <Button type="button" className="mt-10 flex gap-2" variant={'outline'} onClick={handleAppendOptionItem}><PlusIcon size={16} /> Add Item</Button>
             }
 
         </div>

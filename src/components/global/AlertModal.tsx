@@ -10,6 +10,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { ReactNode } from "react"
+import { Button } from "../ui/button"
 
 const AlertModal = ({ trigger, title, description, action }: { trigger: ReactNode, title: string, description: string, action?: () => void }) => {
     return (
@@ -26,7 +27,11 @@ const AlertModal = ({ trigger, title, description, action }: { trigger: ReactNod
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={action}>Continue</AlertDialogAction>
+                    <AlertDialogAction asChild >
+                        <Button className="bg-red-500 hover:bg-red-400" variant={'destructive'} onClick={action}>
+                            Continue
+                        </Button>
+                    </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>

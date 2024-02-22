@@ -34,12 +34,14 @@ interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[],
     additionalColumns?: React.ReactNode;
+    loading: boolean;
 }
 
 function DataTable<TData, TValue>({
     columns,
     data,
-    additionalColumns
+    additionalColumns,
+    loading
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -64,14 +66,14 @@ function DataTable<TData, TValue>({
     return (
         <div className="flex flex-col gap-3">
 
-            <div className="flex justify-between gap-2">
-                <div className="flex gap-5 items-center">
-                    <div className="flex items-center">
+            <div className="flex flex-col md:flex-row justify-between gap-2">
+                <div className="flex flex-col md:flex-row gap-2 md:gap-5 items-center">
+                    <div className="flex items-center w-full md:w-fit">
                         <Input
                             placeholder="Search"
                             value={globalFilter ?? ""}
                             onChange={(event) => setGlobalFilter(event.target.value)}
-                            className="max-w-sm"
+                            className="w-full md:max-w-sm"
                         />
                     </div>
 
@@ -96,7 +98,7 @@ function DataTable<TData, TValue>({
                         </Select>
                     </div>
                 </div>
-                                    
+
                 {additionalColumns}
             </div>
 
@@ -123,26 +125,41 @@ function DataTable<TData, TValue>({
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            ))
-                        ) : (
+                        {loading ?
+
                             <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    No results.
+                                <TableCell colSpan={columns.length} className="h-24">
+                                    <div className="flex gap-1 flex-row-reverse items-center justify-center overflow-clip h-full">
+                                        <div className="flex min-h-1 h-1 bg-slate-900 aspect-square rounded-full animate-ping"></div>
+                                        <div className="flex min-h-1 h-1 bg-slate-900 aspect-square rounded-full animate-ping"></div>
+                                    </div>
                                 </TableCell>
                             </TableRow>
-                        )}
+
+                            :
+
+                            table.getRowModel().rows?.length ? (
+                                table.getRowModel().rows.map((row) => (
+                                    <TableRow
+                                        key={row.id}
+                                        data-state={row.getIsSelected() && "selected"}
+                                    >
+                                        {row.getVisibleCells().map((cell) => (
+                                            <TableCell key={cell.id}>
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                                        No results.
+                                    </TableCell>
+                                </TableRow>
+                            )
+                        }
+
                     </TableBody>
                 </Table>
             </div>

@@ -13,12 +13,14 @@ import toast from "react-hot-toast"
 const MenuForm = (
     {
         formDisabled = false,
+        setFormButtonDisabled,
         isEditing = false,
         setIsEditing,
         id = null
     }: {
         formDisabled?: boolean,
         isEditing?: boolean,
+        setFormButtonDisabled: React.Dispatch<SetStateAction<boolean>>,
         setIsEditing?: React.Dispatch<SetStateAction<boolean>>,
         id?: string | null
     }) => {
@@ -30,21 +32,26 @@ const MenuForm = (
             basePrice: 0,
             category: '',
             options: [],
-            cost: '',
+            cost: 0,
             amountInStock: 0,
         }
     });
 
     const onFormSubmit = async (values: TZodMenuItem) => {
-        if(isEditing && id && setIsEditing) {
-            await updateMenuItem({data: values, id: id});
+        setFormButtonDisabled(true);
+        
+        if (isEditing && id && setIsEditing) {
+            await updateMenuItem({ data: values, id: id });
             toast.success('Menu successfully updated');
             setIsEditing(false);
-        }else{
+        } else {
             await createMenuItem({ data: values });
             toast.success('Menu successfully created');
             addMenuItemForm.reset()
         }
+        
+        setFormButtonDisabled(false);
+
     }
 
     useEffect(() => {
@@ -63,7 +70,7 @@ const MenuForm = (
     return (
         <Form {...addMenuItemForm}>
             <form id="add-menu-item-form" onSubmit={addMenuItemForm.handleSubmit(onFormSubmit)} className="grid grid-cols-1 lg:grid-cols-2 gap-5 max-h-[70vh] overflow-auto h-full">
-                <div className="flex flex-col gap-5 bg-white p-5 rounded-md border border-black/10 h-fit">
+                <div className="flex flex-col gap-3 bg-white p-5 rounded-md border border-black/10 h-fit">
                     <FormField
                         control={addMenuItemForm.control}
                         name="name"
