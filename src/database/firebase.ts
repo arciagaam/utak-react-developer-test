@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD_n5_xrvSlwcrXei_FQMSlx4iYLyJzVqA",
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "utak-menu.firebaseapp.com",
   databaseURL: "https://utak-menu-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "utak-menu",
